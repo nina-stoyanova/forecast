@@ -1,10 +1,9 @@
 <template>
-  <div>
-    <main></main>
-  </div>
-  <DropDown></DropDown>
-  <DailyForcast></DailyForcast>
-  <WeeklyForcast></WeeklyForcast>
+  <main>
+    <DropDown></DropDown>
+    <DailyForcast></DailyForcast>
+    <WeeklyForcast></WeeklyForcast>
+  </main>
 </template>
 
 <script>
@@ -14,7 +13,7 @@ import WeeklyForcast from "./WeeklyForcast.vue";
 
 export default {
   name: "ThePage",
-  component: {
+  components: {
     DropDown,
     DailyForcast,
     WeeklyForcast,
