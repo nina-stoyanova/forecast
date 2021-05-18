@@ -1,20 +1,32 @@
 <template>
-  <select @change="onChange" name="dropdown" id="city" class="dropdown">
-    <option value="sofia">sofia</option>
+  <select @change="onChange" name="dropdown" id="count" class="dropdown">
+    <option
+      v-for="city in cityArray"
+      :key="city.cityName"
+      v-bind:value="city.cityName"
+    >
+      {{ city.cityName }} {{ city.countryName }}
+    </option>
   </select>
 </template>
 
 <script>
-import * as countryList from "../data/city.js";
+import { countryList } from "../data/country.js";
 
 export default {
   name: "DropDown",
+  emits: ["cityArray", "selectedCity"],
+  data: function () {
+    return {
+      cityArray: [], //we have the array with objects(not sure if we need this)
+    };
+  },
   mounted() {
     let cityArr = [];
     for (let i = 0; i < countryList.length; i++) {
       let country = countryList[i];
       for (let j = 0; j < country.cities.length; j++) {
-        let city = country.cities[j];
+        let city = country.cities[j]; //the object that holds cityname, country name and code is city
         cityArr.push({
           cityName: city.name,
           countryName: country.name,
@@ -22,18 +34,15 @@ export default {
         });
       }
     }
-    console.log(cityArr);
+    this.cityArray = cityArr;
   },
 
   methods: {
-    onChange(eventInfo) {
-      console.log(eventInfo);
+    onChange(event) {
+      let selectedCity = event.target.value; //selectedCity = name of the city
+      this.cityArray.find();
+      this.$emit("selectedCity", selectedCity); //we send the name and more info in cityArray
     },
-  },
-  data: function () {
-    return {
-      cities: [],
-    };
   },
 };
 </script>
