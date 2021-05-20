@@ -23,5 +23,6 @@ export default {
 .empty-line {
   background-color: gray;
   padding: 1px;
+  width: 100%;
 }
 </style>

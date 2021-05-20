@@ -2,10 +2,11 @@
   <main>
     <DropDown @selectedCityObject="onSelectedCity"></DropDown>
     <DailyForcast
-      v-bind:temperature="temp"
-      v-bind:description="desc"
       v-bind:cityName="cityName"
       v-bind:countryName="countryName"
+      v-bind:temperature="temp"
+      v-bind:description="desc"
+      v-bind:iconCode="iCode"
     ></DailyForcast>
     <WeeklyForcast></WeeklyForcast>
   </main>
@@ -26,6 +27,7 @@ export default {
       desc: "",
       cityName: "",
       countryName: "",
+      iCode: "",
     };
   },
   components: {
@@ -53,7 +55,8 @@ export default {
           this.temp = arr.temp;
           this.desc = arr.weather.description;
           this.cityName = arr.city_name;
-          console.log(this.cityName);
+          this.countryName = selectedCityObject.countryName;
+          this.iCode = arr.weather.icon;
         })
         .catch((error) => {
           console.log(error);

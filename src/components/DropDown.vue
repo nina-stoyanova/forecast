@@ -1,13 +1,15 @@
 <template>
-  <select @change="onChange" name="dropdown" id="count" class="dropdown">
-    <option
-      v-for="city in cityArray"
-      :key="city.cityName"
-      v-bind:value="city.cityName"
-    >
-      {{ city.cityName }} {{ city.countryName }}
-    </option>
-  </select>
+  <div class="container">
+    <select @change="onChange" name="dropdown" id="count" class="dropdown">
+      <option
+        v-for="city in cityArray"
+        :key="city.cityName"
+        v-bind:value="city.cityName"
+      >
+        {{ city.cityName }}
+      </option>
+    </select>
+  </div>
 </template>
 
 <script>
@@ -52,7 +54,13 @@ export default {
 </script>
 
 <style>
+.container {
+  display: flex;
+  justify-content: center;
+}
 .dropdown {
-  width: 100%;
+  width: 98%;
+  padding: 10px;
+  border-radius: 5px;
 }
 </style>
