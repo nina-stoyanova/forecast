@@ -1,7 +1,12 @@
 <template>
   <main>
-    <DropDown @selectedCity="onSelectedCity"></DropDown>
-    <DailyForcast></DailyForcast>
+    <DropDown @selectedCityObject="onSelectedCity"></DropDown>
+    <DailyForcast
+      v-bind:temperature="temp"
+      v-bind:description="desc"
+      v-bind:cityName="cityName"
+      v-bind:countryName="countryName"
+    ></DailyForcast>
     <WeeklyForcast></WeeklyForcast>
   </main>
 </template>
@@ -15,7 +20,12 @@ export default {
   name: "ThePage",
   data: function () {
     return {
-      citySelected: "", //we save the selected city as data property
+      selectedCityObject: "", //we save the selected city as data propert
+      arrayRequest: [],
+      temp: 0,
+      desc: "",
+      cityName: "",
+      countryName: "",
     };
   },
   components: {
@@ -24,9 +34,30 @@ export default {
     WeeklyForcast,
   },
   methods: {
-    onSelectedCity(selectedCity) {
-      this.citySelected = selectedCity;
-      console.log(this.citySelected);
+    onSelectedCity(selectedCityObject) {
+      this.selectedCityObject = selectedCityObject;
+      //console.log(selectedCityObject.cityName);
+
+      fetch(
+        `https://api.weatherbit.io/v2.0/current?key=fafa69308bd244c49215c6f89c37b286&city=${selectedCityObject.cityName}&country=${selectedCityObject.countryCode}`
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          this.arrayRequest = data.data;
+          //console.log(this.arrayRequest);
+          let arr = this.arrayRequest.find((element) => {
+            return element.city_name === selectedCityObject.cityName;
+          });
+          this.temp = arr.temp;
+          this.desc = arr.weather.description;
+          this.cityName = arr.city_name;
+          console.log(this.cityName);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
 };

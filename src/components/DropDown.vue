@@ -15,7 +15,7 @@ import { countryList } from "../data/country.js";
 
 export default {
   name: "DropDown",
-  emits: ["cityArray", "selectedCity"],
+  emits: ["selectedCityObject"],
   data: function () {
     return {
       cityArray: [], //we have the array with objects(not sure if we need this)
@@ -39,13 +39,20 @@ export default {
 
   methods: {
     onChange(event) {
-      let selectedCity = event.target.value; //selectedCity = name of the city
-      this.cityArray.find();
-      this.$emit("selectedCity", selectedCity); //we send the name and more info in cityArray
+      let selectedCity = event.target.value; //selectedCity = name of the selected city
+      let selectedCityObject = this.cityArray.find((element) => {
+        //the object of the selected city
+        return element.cityName === selectedCity; // returns the object of the selected city
+      });
+
+      this.$emit("selectedCityObject", selectedCityObject); //we send the object of the selected city
     },
   },
 };
 </script>
 
 <style>
+.dropdown {
+  width: 100%;
+}
 </style>
