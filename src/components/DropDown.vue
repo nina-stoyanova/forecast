@@ -57,6 +57,7 @@ export default {
 .container {
   display: flex;
   justify-content: center;
+  background-color: black;
 }
 .dropdown {
   width: 98%;
