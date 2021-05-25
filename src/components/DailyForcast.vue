@@ -1,22 +1,23 @@
 <template>
   <div class="parent-daily-forcast">
-    <div class="first-container">
-      <div class="first-container_city">
+    <div class="ui-first-segment">
+      <div class="ui-first-segment_city">
         {{ cityName }} <em class="emp"> ({{ countryName }})</em>
       </div>
-      <div class="first-container_date">{{ currentDate }}</div>
+
+      <div class="ui-first-segment_date">{{ currentDate }}</div>
     </div>
-    <div class="second-container">
-      <button class="second-container_left-button" type="button">C</button>
-      <button class="second-container_right-button" type="button">F</button>
+    <div class="ui-second-segment">
+      <button class="ui-second-segment_state-succes" type="button">C</button>
+      <button class="ui-second-segment_state-normal" type="button">F</button>
     </div>
   </div>
-  <div class="parent-third-container">
-    <div class="parent-third-container-main-icon">
+  <div class="ui-third-segment">
+    <div class="ui-third-segment_icon">
       <img v-bind:src="this.url" alt="icon" />
     </div>
-    <div class="parent-third-container_temp">{{ temperature }}</div>
-    <div class="parent-third-container_desc">{{ description }}</div>
+    <div class="ui-third-segment_temp">{{ temperature }}</div>
+    <div class="ui-third-segment_desc">{{ description }}</div>
   </div>
 </template>
 
@@ -38,7 +39,6 @@ export default {
   },
   watch: {
     iconCode() {
-      //if iconCode change, it will change in the url as well
       this.url = `https://www.weatherbit.io/static/img/icons/${this.iconCode}.png`;
     },
   },
@@ -71,38 +71,38 @@ export default {
   background-color: black;
   color: white;
 }
-.first-container_city {
+.ui-first-segment_city {
   font-size: 1.5rem;
 }
 .emp {
   font-size: 1rem;
 }
-.second-container {
+.ui-second-segment {
   order: 5;
   align-self: center;
 }
 
-.second-container_left-button {
+.ui-second-segment_state-succes {
   background-color: green;
   border-radius: 4px 0 0 4px;
   color: white;
 }
-.second-container_right-button {
+.ui-second-segment_state-normal {
   background-color: gray;
   border-radius: 0 4px 4px 0;
   color: white;
 }
-.parent-third-container {
+.ui-third-segment {
   display: flex;
   justify-content: center;
   padding: 3rem;
   background-color: black;
   color: white;
 }
-.parent-third-container_temp {
+.ui-third-segment_temp {
   font-size: 3rem;
 }
-.parent-third-container_desc {
+.ui-third-segment_desc {
   align-self: flex-end;
 }
 </style>

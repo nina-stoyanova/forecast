@@ -1,6 +1,6 @@
 <template>
   <main>
-    <DropDown @selectedCityObject="onSelectedCity"></DropDown>
+    <DropDown @selectedCities="onSelectedCity"></DropDown>
     <DailyForcast
       v-bind:cityName="cityName"
       v-bind:countryName="countryName"
@@ -8,9 +8,7 @@
       v-bind:description="desc"
       v-bind:iconCode="iCode"
     ></DailyForcast>
-    <WeeklyForcast
-      v-bind:arrayWeeklyRequest="arrayWeeklyRequest"
-    ></WeeklyForcast>
+    <WeeklyForcast v-bind:weeklyRequests="weeklyRequests"></WeeklyForcast>
   </main>
 </template>
 
@@ -24,15 +22,15 @@ export default {
   name: "ThePage",
   data: function () {
     return {
-      selectedCityObject: "", //we save the selected city as data propert
-      arrayDailyRequest: [],
+      selectedCities: {},
+      dailyRequests: [],
       temp: 0,
       desc: "",
       cityName: "",
       countryName: "",
       iCode: "",
-      arrayWeeklyRequest: [],
-      objWeeklyRequest: {},
+      weeklyRequests: [],
+      weeklyProperties: {},
     };
   },
   components: {
@@ -41,19 +39,39 @@ export default {
     WeeklyForcast,
   },
   methods: {
-    getWeatherResponse() {
+    /**
+     * Reright the selected city
+     */
+    onSelectedCity(selectedCities) {
+      this.selectedCities = selectedCities;
+      this.getCurrentWeatherResponse();
+      this.getDailyWeatherResponse();
+    },
+    /**
+     * Get current weather response
+     */
+    getCurrentWeatherResponse() {
       fetch(
-        `https://api.weatherbit.io/v2.0/current?key=fafa69308bd244c49215c6f89c37b286&city=${selectedCityObject.cityName}&country=${selectedCityObject.countryCode}`
+        `https://api.weatherbit.io/v2.0/current?key=fafa69308bd244c49215c6f89c37b286&city=${this.selectedCities.cityName}&country=${this.selectedCities.countryCode}`
       )
         .then((response) => {
           return response.json();
         })
         .then((data) => {
-          this.arrayDailyRequest = data.data;
+          this.dailyRequests = data.data;
           let arr = this.findCity();
           this.setProperties(arr);
         })
         .catch(() => {});
+    },
+    /**
+     * Find the city with the selected name and compare it with the response city
+     */
+    findCity() {
+      let arr = this.dailyRequests.find((element) => {
+        return element.city_name === this.selectedCities.cityName;
+      });
+      return arr;
     },
     /**
      * Set up properties from the request data
@@ -62,46 +80,37 @@ export default {
       this.temp = arr.temp;
       this.desc = arr.weather.description;
       this.cityName = arr.city_name;
-      this.countryName = selectedCityObject.countryName;
+      this.countryName = this.selectedCities.countryName;
       this.iCode = arr.weather.icon;
     },
     /**
-     * Find the city with the selected name
+     * Get daily weather response, fill in dailyForcasts with set up properties
      */
-    findCity() {
-      let arr = this.arrayDailyRequest.find((element) => {
-        return element.city_name === selectedCityObject.cityName;
-      });
-      return arr;
-    },
-
-    onSelectedCity(selectedCityObject) {
-      this.selectedCityObject = selectedCityObject;
-      this.loadWeatherData();
+    getDailyWeatherResponse() {
       fetch(
-        `https://api.weatherbit.io/v2.0/forecast/daily?key=fafa69308bd244c49215c6f89c37b286&city=${selectedCityObject.cityName}&country=${selectedCityObject.countryCode}&days=5`
+        `https://api.weatherbit.io/v2.0/forecast/daily?key=fafa69308bd244c49215c6f89c37b286&city=${this.selectedCities.cityName}&country=${this.selectedCities.countryCode}&days=5`
       )
         .then((response) => {
           return response.json();
         })
         .then((result) => {
-          if (result.city_name === selectedCityObject.cityName) {
+          if (result.city_name === this.selectedCities.cityName) {
             let arr = result.data;
-            this.arrayWeeklyRequest = [];
+            this.weeklyRequests = [];
             for (let i = 0; i < arr.length; i++) {
               let element = arr[i];
               let date = arr[i].datetime;
-              let stringDate = moment(date).format("dddd"); // here we change 20.20.2021 to Friday for example
+              let stringDate = moment(date).format("dddd");
               let maxTemp = element.max_temp;
               let minTemp = element.min_temp;
               let icon = element.weather.icon;
-              this.objWeeklyRequest = {
+              this.weeklyProperties = {
                 maxTemp,
                 minTemp,
                 icon,
                 stringDate,
               };
-              this.arrayWeeklyRequest.push(this.objWeeklyRequest);
+              this.weeklyRequests.push(this.weeklyProperties);
             }
           }
         });

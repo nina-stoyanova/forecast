@@ -1,6 +1,6 @@
 <template>
-  <div v-if="arrayWeeklyRequest.length > 1" class="parent-weekly-forcast">
-    <ul v-for="element in arrayWeeklyRequest" :key="element" class="ul">
+  <div v-if="weeklyRequests.length > 1" class="parent-weekly-forcast">
+    <ul v-for="element in weeklyRequests" :key="element" class="ul">
       <li>{{ element.stringDate }}</li>
       <li>
         <img v-bind:src="getIconUrl(element.icon)" alt="icon" />
@@ -14,8 +14,11 @@
 <script>
 export default {
   name: "WeeklyForcast",
-  props: ["arrayWeeklyRequest"],
+  props: ["weeklyRequests"],
   methods: {
+    /**
+     * get the code for the needed icon
+     */
     getIconUrl(iconCode) {
       return `https://www.weatherbit.io/static/img/icons/${iconCode}.png`;
     },

@@ -17,18 +17,21 @@ import { countryList } from "../data/country.js";
 
 export default {
   name: "DropDown",
-  emits: ["selectedCityObject"],
+  emits: ["selectedCities"],
   data: function () {
     return {
-      cityArray: [], //we have the array with objects(not sure if we need this)
+      cityArray: [],
     };
   },
+  /**
+   * Get city object from country list and fill in array with set up properties
+   */
   mounted() {
     let cityArr = [];
     for (let i = 0; i < countryList.length; i++) {
       let country = countryList[i];
       for (let j = 0; j < country.cities.length; j++) {
-        let city = country.cities[j]; //the object that holds cityname, country name and code is city
+        let city = country.cities[j];
         cityArr.push({
           cityName: city.name,
           countryName: country.name,
@@ -38,16 +41,17 @@ export default {
     }
     this.cityArray = cityArr;
   },
-
+  /**
+   * Get selected value, compare it with cityName from the array and emit event name and event object
+   */
   methods: {
     onChange(event) {
-      let selectedCity = event.target.value; //selectedCity = name of the selected city
-      let selectedCityObject = this.cityArray.find((element) => {
-        //the object of the selected city
-        return element.cityName === selectedCity; // returns the object of the selected city
+      let selectedCity = event.target.value;
+      let selectedCities = this.cityArray.find((element) => {
+        return element.cityName === selectedCity;
       });
 
-      this.$emit("selectedCityObject", selectedCityObject); //we send the object of the selected city
+      this.$emit("selectedCities", selectedCities);
     },
   },
 };
