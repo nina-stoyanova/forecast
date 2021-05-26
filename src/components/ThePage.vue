@@ -8,9 +8,20 @@
       v-bind:description="desc"
       v-bind:iconCode="iCode"
     ></DailyForcast>
-    <WeeklyForcast
-      v-bind:arrayWeeklyRequest="arrayWeeklyRequest"
+     <div v-if="arrayWeeklyRequest.length > 1" class="parent-weekly-forcast">
+    <WeeklyForcast 
+      v-for="element in arrayWeeklyRequest" :key="element" 
+      v-bind:day="element.datetime"
+      v-bind:icon="element.weather.icon"
+      v-bind:minT="element.min_temp" 
+      v-bind:maxT="element.max_temp"
+     
     ></WeeklyForcast>
+  </div>
+
+
+      
+    
   </main>
 </template>
 
@@ -18,7 +29,6 @@
 import DropDown from "./DropDown.vue";
 import DailyForcast from "./DailyForcast.vue";
 import WeeklyForcast from "./WeeklyForcast.vue";
-import moment from "moment";
 
 export default {
   name: "ThePage",
@@ -43,7 +53,7 @@ export default {
   methods: {
     getWeatherResponse() {
       fetch(
-        `https://api.weatherbit.io/v2.0/current?key=fafa69308bd244c49215c6f89c37b286&city=${selectedCityObject.cityName}&country=${selectedCityObject.countryCode}`
+        `https://api.weatherbit.io/v2.0/current?key=fafa69308bd244c49215c6f89c37b286&city=${this.selectedCityObject.cityName}&country=${this.selectedCityObject.countryCode}`
       )
         .then((response) => {
           return response.json();
@@ -62,7 +72,7 @@ export default {
       this.temp = arr.temp;
       this.desc = arr.weather.description;
       this.cityName = arr.city_name;
-      this.countryName = selectedCityObject.countryName;
+      this.countryName = this.selectedCityObject.countryName;
       this.iCode = arr.weather.icon;
     },
     /**
@@ -70,14 +80,14 @@ export default {
      */
     findCity() {
       let arr = this.arrayDailyRequest.find((element) => {
-        return element.city_name === selectedCityObject.cityName;
+        return element.city_name === this.selectedCityObject.cityName;
       });
       return arr;
     },
 
     onSelectedCity(selectedCityObject) {
       this.selectedCityObject = selectedCityObject;
-      this.loadWeatherData();
+
       fetch(
         `https://api.weatherbit.io/v2.0/forecast/daily?key=fafa69308bd244c49215c6f89c37b286&city=${selectedCityObject.cityName}&country=${selectedCityObject.countryCode}&days=5`
       )
@@ -90,18 +100,7 @@ export default {
             this.arrayWeeklyRequest = [];
             for (let i = 0; i < arr.length; i++) {
               let element = arr[i];
-              let date = arr[i].datetime;
-              let stringDate = moment(date).format("dddd"); // here we change 20.20.2021 to Friday for example
-              let maxTemp = element.max_temp;
-              let minTemp = element.min_temp;
-              let icon = element.weather.icon;
-              this.objWeeklyRequest = {
-                maxTemp,
-                minTemp,
-                icon,
-                stringDate,
-              };
-              this.arrayWeeklyRequest.push(this.objWeeklyRequest);
+              this.arrayWeeklyRequest.push(element);
             }
           }
         });
@@ -112,3 +111,4 @@ export default {
 
 <style>
 </style>
+

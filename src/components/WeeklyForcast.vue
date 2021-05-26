@@ -1,26 +1,46 @@
 <template>
-  <div v-if="arrayWeeklyRequest.length > 1" class="parent-weekly-forcast">
-    <ul v-for="element in arrayWeeklyRequest" :key="element" class="ul">
-      <li>{{ element.stringDate }}</li>
-      <li>
-        <img v-bind:src="getIconUrl(element.icon)" alt="icon" />
+  <div class="parent-weekly-forcast">
+    <ul class="ul">
+      <li>{{format(day)}}</li>
+      <li><img v-bind:src="getIconUrl" alt="icon" />
       </li>
-      <li>Max {{ element.maxTemp }} Min {{ element.minTemp }}</li>
+      <li>Min {{ minT}} Max {{ maxT }}</li>
     </ul>
   </div>
-  <div class="footer">black space</div>
-</template>
+
+</template>-
 
 <script>
+import moment from "moment";
 export default {
   name: "WeeklyForcast",
-  props: ["arrayWeeklyRequest"],
-  methods: {
-    getIconUrl(iconCode) {
-      return `https://www.weatherbit.io/static/img/icons/${iconCode}.png`;
+  props: ["day","icon","minT","maxT"],
+  computed:{
+     getIconUrl() {
+     return`https://www.weatherbit.io/static/img/icons/${this.icon}.png`;
     },
   },
+  methods: {
+       format(stringDate){
+      return  moment(stringDate).format("dddd");
+    }
+  }
+  
 };
+/* 
+              let stringDate = moment(arr[i].datetime).format("dddd"); // here we change 20.20.2021 to Friday for example
+              let maxTemp = element.max_temp;
+              let minTemp = element.min_temp;
+              let icon = element.weather.icon;
+              this.objWeeklyRequest = {
+                maxTemp,
+                minTemp,
+                icon,
+                stringDate,
+              };
+              this.arrayWeeklyRequest.push(this.objWeeklyRequest);
+            }
+            */
 </script>
 
 <style>
