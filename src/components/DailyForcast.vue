@@ -10,13 +10,13 @@
       <button class="second-container_left-button" type="button">C</button>
       <button class="second-container_right-button" type="button">F</button>
     </div>
-  </div>
-  <div class="parent-third-container">
-    <div class="parent-third-container-main-icon">
-      <img v-bind:src="this.url" alt="icon" />
+    <div class="third-container">
+      <div class="third-container-main-icon">
+        <img v-bind:src="this.url" alt="icon" />
+      </div>
+      <div class="third-container_temp">{{ temperature }}</div>
+      <div class="third-container_desc">{{ description }}</div>
     </div>
-    <div class="parent-third-container_temp">{{ temperature }}</div>
-    <div class="parent-third-container_desc">{{ description }}</div>
   </div>
 </template>
 
@@ -26,6 +26,7 @@ import moment from "moment";
 export default {
   name: "DailyForcast",
   props: ["temperature", "description", "cityName", "countryName", "iconCode"],
+
   data: function () {
     return {
       url: "https://www.weatherbit.io/static/img/icons/c04d.png",
@@ -92,17 +93,22 @@ export default {
   border-radius: 0 4px 4px 0;
   color: white;
 }
-.parent-third-container {
+.third-container {
   display: flex;
   justify-content: center;
   padding: 3rem;
   background-color: black;
   color: white;
 }
-.parent-third-container_temp {
-  font-size: 3rem;
+.third-container_temp {
+  font-size: 5rem;
 }
-.parent-third-container_desc {
+.third-container_desc {
   align-self: flex-end;
+  text-align: center;
+  
+}
+.third-container_desc {
+  text-align: center;
 }
 </style>

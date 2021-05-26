@@ -27,20 +27,7 @@ export default {
   }
   
 };
-/* 
-              let stringDate = moment(arr[i].datetime).format("dddd"); // here we change 20.20.2021 to Friday for example
-              let maxTemp = element.max_temp;
-              let minTemp = element.min_temp;
-              let icon = element.weather.icon;
-              this.objWeeklyRequest = {
-                maxTemp,
-                minTemp,
-                icon,
-                stringDate,
-              };
-              this.arrayWeeklyRequest.push(this.objWeeklyRequest);
-            }
-            */
+
 </script>
 
 <style>
